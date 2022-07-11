@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>ShowMeetings.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #008000; font-weight: bold;}
+.s3 { color: #0000ff;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ShowMeetings.java</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.example.meetingscheduler;
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<a name="l4"><span class="ln">4    </span></a>
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import </span>android.content.Intent;
+<a name="l6"><span class="ln">6    </span></a><span class="s0">import </span>android.database.Cursor;
+<a name="l7"><span class="ln">7    </span></a><span class="s0">import </span>android.os.Bundle;
+<a name="l8"><span class="ln">8    </span></a><span class="s0">import </span>android.view.View;
+<a name="l9"><span class="ln">9    </span></a><span class="s0">import </span>android.widget.Button;
+<a name="l10"><span class="ln">10   </span></a><span class="s0">import </span>android.widget.TextView;
+<a name="l11"><span class="ln">11   </span></a>
+<a name="l12"><span class="ln">12   </span></a><span class="s0">import </span>java.util.ArrayList;
+<a name="l13"><span class="ln">13   </span></a>
+<a name="l14"><span class="ln">14   </span></a><span class="s0">public class </span>ShowMeetings <span class="s0">extends </span>AppCompatActivity
+<a name="l15"><span class="ln">15   </span></a>{
+<a name="l16"><span class="ln">16   </span></a>    DbManager db;
+<a name="l17"><span class="ln">17   </span></a>    TextView dat,time,agenda;
+<a name="l18"><span class="ln">18   </span></a>    Button main_menu;
+<a name="l19"><span class="ln">19   </span></a>    @Override
+<a name="l20"><span class="ln">20   </span></a>    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+<a name="l21"><span class="ln">21   </span></a>        <span class="s0">super</span>.onCreate(savedInstanceState);
+<a name="l22"><span class="ln">22   </span></a>        setContentView(R.layout.activity_show_meetings);
+<a name="l23"><span class="ln">23   </span></a>        db=<span class="s0">new </span>DbManager(<span class="s0">this</span>);
+<a name="l24"><span class="ln">24   </span></a>        dat = (TextView) findViewById(R.id.textViewdate);
+<a name="l25"><span class="ln">25   </span></a>        time = (TextView) findViewById(R.id.textViewtime);
+<a name="l26"><span class="ln">26   </span></a>        agenda = (TextView) findViewById(R.id.textViewagenda);
+<a name="l27"><span class="ln">27   </span></a>        main_menu=(Button)findViewById(R.id.button_mainmenu);
+<a name="l28"><span class="ln">28   </span></a>        main_menu.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+<a name="l29"><span class="ln">29   </span></a>            @Override
+<a name="l30"><span class="ln">30   </span></a>            <span class="s0">public void </span>onClick(View v) {
+<a name="l31"><span class="ln">31   </span></a>                Bundle bundle = getIntent().getBundleExtra(<span class="s2">&quot;data&quot;</span>);
+<a name="l32"><span class="ln">32   </span></a>                String username = bundle.getString(<span class="s2">&quot;username&quot;</span>);
+<a name="l33"><span class="ln">33   </span></a>                Bundle bundle1 = <span class="s0">new </span>Bundle();
+<a name="l34"><span class="ln">34   </span></a>                bundle1.putString(<span class="s2">&quot;username&quot;</span>, username);
+<a name="l35"><span class="ln">35   </span></a>                Intent intent=<span class="s0">new </span>Intent(ShowMeetings.<span class="s0">this</span>,select.<span class="s0">class</span>);
+<a name="l36"><span class="ln">36   </span></a>                intent.putExtras(bundle1);
+<a name="l37"><span class="ln">37   </span></a>                startActivity(intent);
+<a name="l38"><span class="ln">38   </span></a>            }
+<a name="l39"><span class="ln">39   </span></a>        });
+<a name="l40"><span class="ln">40   </span></a>        Bundle bundle = getIntent().getBundleExtra(<span class="s2">&quot;data&quot;</span>);
+<a name="l41"><span class="ln">41   </span></a>        String username = bundle.getString(<span class="s2">&quot;username&quot;</span>);
+<a name="l42"><span class="ln">42   </span></a>        String date=bundle.getString(<span class="s2">&quot;date1&quot;</span>);
+<a name="l43"><span class="ln">43   </span></a>        ArrayList&lt;String&gt; rs = db.displaydate(date,username);
+<a name="l44"><span class="ln">44   </span></a>        ArrayList&lt;String&gt; t = db.displaytime(date,username);
+<a name="l45"><span class="ln">45   </span></a>        ArrayList&lt;String&gt; ag = db.displayagenda(date,username);
+<a name="l46"><span class="ln">46   </span></a>        <span class="s0">int </span>size = rs.size();
+<a name="l47"><span class="ln">47   </span></a>        <span class="s0">for</span>(<span class="s0">int </span>i=<span class="s3">0</span>;i&lt;size;i++)
+<a name="l48"><span class="ln">48   </span></a>        {
+<a name="l49"><span class="ln">49   </span></a>            dat.setText(dat.getText()+<span class="s2">&quot;</span><span class="s0">\n\n</span><span class="s2">&quot;</span>+rs.get(i));
+<a name="l50"><span class="ln">50   </span></a>        }
+<a name="l51"><span class="ln">51   </span></a>        <span class="s0">for</span>(<span class="s0">int </span>i=<span class="s3">0</span>;i&lt;t.size();i++)
+<a name="l52"><span class="ln">52   </span></a>        {
+<a name="l53"><span class="ln">53   </span></a>            time.setText(time.getText()+<span class="s2">&quot;</span><span class="s0">\n\n</span><span class="s2">&quot;</span>+t.get(i));
+<a name="l54"><span class="ln">54   </span></a>        }
+<a name="l55"><span class="ln">55   </span></a>        <span class="s0">for</span>(<span class="s0">int </span>i=<span class="s3">0</span>;i&lt;ag.size();i++)
+<a name="l56"><span class="ln">56   </span></a>        {
+<a name="l57"><span class="ln">57   </span></a>            agenda.setText(agenda.getText()+<span class="s2">&quot;</span><span class="s0">\n\n</span><span class="s2">&quot;</span>+ag.get(i));
+<a name="l58"><span class="ln">58   </span></a>        }
+<a name="l59"><span class="ln">59   </span></a>    }
+<a name="l60"><span class="ln">60   </span></a>}</pre>
+</body>
+</html>

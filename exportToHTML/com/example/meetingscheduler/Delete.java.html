@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>Delete.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #008000; font-weight: bold;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Delete.java</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.example.meetingscheduler;
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<a name="l4"><span class="ln">4    </span></a>
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import </span>android.content.Intent;
+<a name="l6"><span class="ln">6    </span></a><span class="s0">import </span>android.os.Bundle;
+<a name="l7"><span class="ln">7    </span></a><span class="s0">import </span>android.view.View;
+<a name="l8"><span class="ln">8    </span></a><span class="s0">import </span>android.widget.Button;
+<a name="l9"><span class="ln">9    </span></a><span class="s0">import </span>android.widget.CalendarView;
+<a name="l10"><span class="ln">10   </span></a><span class="s0">import </span>android.widget.TextView;
+<a name="l11"><span class="ln">11   </span></a><span class="s0">import </span>android.widget.Toast;
+<a name="l12"><span class="ln">12   </span></a>
+<a name="l13"><span class="ln">13   </span></a><span class="s0">public class </span>Delete <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener{
+<a name="l14"><span class="ln">14   </span></a>    CalendarView calendar;
+<a name="l15"><span class="ln">15   </span></a>    TextView date;
+<a name="l16"><span class="ln">16   </span></a>    Button search_date;
+<a name="l17"><span class="ln">17   </span></a>    DbManager db;
+<a name="l18"><span class="ln">18   </span></a>
+<a name="l19"><span class="ln">19   </span></a>    @Override
+<a name="l20"><span class="ln">20   </span></a>    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+<a name="l21"><span class="ln">21   </span></a>        <span class="s0">super</span>.onCreate(savedInstanceState);
+<a name="l22"><span class="ln">22   </span></a>        setContentView(R.layout.activity_delete);
+<a name="l23"><span class="ln">23   </span></a>        date= (TextView) findViewById(R.id.textViewdate);
+<a name="l24"><span class="ln">24   </span></a>        search_date=(Button)findViewById(R.id.button_search);
+<a name="l25"><span class="ln">25   </span></a>        search_date.setOnClickListener(<span class="s0">this</span>);
+<a name="l26"><span class="ln">26   </span></a>        db=<span class="s0">new </span>DbManager(<span class="s0">this</span>);
+<a name="l27"><span class="ln">27   </span></a>        calendar = (CalendarView)findViewById(R.id.calendarView);
+<a name="l28"><span class="ln">28   </span></a>        calendar.setOnDateChangeListener(<span class="s0">new </span>CalendarView.OnDateChangeListener() {
+<a name="l29"><span class="ln">29   </span></a>
+<a name="l30"><span class="ln">30   </span></a>            @Override
+<a name="l31"><span class="ln">31   </span></a>            <span class="s0">public void </span>onSelectedDayChange(CalendarView view, <span class="s0">int </span>year, <span class="s0">int </span>month,
+<a name="l32"><span class="ln">32   </span></a>                                            <span class="s0">int </span>dayOfMonth) {
+<a name="l33"><span class="ln">33   </span></a>                month=month+<span class="s2">1</span>;
+<a name="l34"><span class="ln">34   </span></a>                String  curDate = String.valueOf(dayOfMonth);
+<a name="l35"><span class="ln">35   </span></a>                String  Year = String.valueOf(year);
+<a name="l36"><span class="ln">36   </span></a>                String  Month = String.valueOf(month);
+<a name="l37"><span class="ln">37   </span></a>
+<a name="l38"><span class="ln">38   </span></a>                date.setText(curDate+<span class="s3">&quot;/&quot;</span>+Month+<span class="s3">&quot;/&quot;</span>+Year);
+<a name="l39"><span class="ln">39   </span></a>            }
+<a name="l40"><span class="ln">40   </span></a>        });
+<a name="l41"><span class="ln">41   </span></a>    }
+<a name="l42"><span class="ln">42   </span></a>
+<a name="l43"><span class="ln">43   </span></a>    @Override
+<a name="l44"><span class="ln">44   </span></a>    <span class="s0">public void </span>onClick(View v)
+<a name="l45"><span class="ln">45   </span></a>    {
+<a name="l46"><span class="ln">46   </span></a>        String d=date.getText().toString();
+<a name="l47"><span class="ln">47   </span></a>        Bundle bundle = getIntent().getExtras();
+<a name="l48"><span class="ln">48   </span></a>        String username = bundle.getString(<span class="s3">&quot;username&quot;</span>);
+<a name="l49"><span class="ln">49   </span></a>        Bundle bundle1 = <span class="s0">new </span>Bundle();
+<a name="l50"><span class="ln">50   </span></a>        bundle1.putString(<span class="s3">&quot;username&quot;</span>, username);
+<a name="l51"><span class="ln">51   </span></a>        Boolean checkdate=db.checkdate(d,username);
+<a name="l52"><span class="ln">52   </span></a>        <span class="s0">if</span>(checkdate==<span class="s0">true</span>)
+<a name="l53"><span class="ln">53   </span></a>        {
+<a name="l54"><span class="ln">54   </span></a>            bundle1.putString(<span class="s3">&quot;date1&quot;</span>,d);
+<a name="l55"><span class="ln">55   </span></a>            Intent intent=<span class="s0">new </span>Intent(<span class="s0">this</span>,DeleteMeeting.<span class="s0">class</span>);
+<a name="l56"><span class="ln">56   </span></a>            intent.putExtra(<span class="s3">&quot;data&quot;</span>,bundle1);
+<a name="l57"><span class="ln">57   </span></a>            startActivity(intent);
+<a name="l58"><span class="ln">58   </span></a>        }
+<a name="l59"><span class="ln">59   </span></a>        <span class="s0">else</span>
+<a name="l60"><span class="ln">60   </span></a>            Toast.makeText(getBaseContext(),<span class="s3">&quot;No Meetings Scheduled for this Date&quot;</span>,Toast.LENGTH_LONG).show();
+<a name="l61"><span class="ln">61   </span></a>    }
+<a name="l62"><span class="ln">62   </span></a>}</pre>
+</body>
+</html>
